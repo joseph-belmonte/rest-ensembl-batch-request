@@ -2,7 +2,7 @@
 
 A collection of python files to help analyze gene coordinates for regulatory features
 
-Genes can be analyzed for regulatory features using the Ensembl REST API. This repository contains a collection of python files that can be used to analyze gene coordinates for regulatory features. The files are designed to be used in a batch request, where the user can input a list of gene coordinates and retrieve regulatory features for each gene. The files use the Ensembl REST API to retrieve regulatory features for a given gene coordinate. The regulatory features include transcription factor binding sites, enhancers, promoters, and other regulatory elements.
+Genes can be analyzed for regulatory features using the Ensembl REST API. The files are designed to be used in a batch request, where the user can input a list of gene coordinates and retrieve regulatory features for each gene. The files use the Ensembl REST API to retrieve regulatory features for a given gene coordinate. The regulatory features include transcription factor binding sites, enhancers, promoters, and other regulatory elements.
 
 The files in this repository are meant to analyze the human genome.
 
@@ -10,26 +10,45 @@ The files in this repository are meant to analyze the human genome.
 
 ## 1. Clone the repository
 
+```bash
+git clone https://github.com/your-username/new-repo.git
+```
+
 ## 1a. Create a virtual environment
 
 Optional: At the root of the repository, create a virtual environment, and select it as the interpreter.
 
-`python -m venv venv`
+```bash
+python -m venv venv
+```
 
 ## 2. Install the required packages
 
-Run the following commands:
+Still at the root of the repository, install the required packages:
 
-`pip install pandas`
-`pip install requests`
+```bash
+pip install requirements.txt
+```
 
 ## 3. Update input files
 
-Place the gene coordinates in a csv file in the `data/input` directory. The csv file should have the column `chromosomal_region`, in the format: `1:918352:918705`. The `:` separates the chromosome number, start position, and end position of the gene coordinate. The csv file should have a header row. Other columns may be included in the csv file, but the `chromosomal_region` column is required to fetch regulatory features.
+Place the gene coordinates in a csv file in the `data/input` directory. The csv file should have the column `chromosomal_region`, in the format:
+
+```csv
+1:918352:918705
+```
+
+where the numbers represent `chromosome_number:start_position:end_position`.
 
 ## 4. Run the main file
 
-From the root directory, run `python -m src.main` to retrieve regulatory features for the gene coordinates that are listed in each csv file in the `data/input` directory.
+From the root directory, run
+
+```bash
+python -m src.main
+```
+
+This will retrieve regulatory features for the gene coordinates that are listed in each csv file in the `data/input` directory. Depending on the size of your input file(s), this may take several minutes or hours.
 
 ## 5. Wait for the requests to complete
 
@@ -37,4 +56,16 @@ Depending on the number of gene coordinates, the process may take some time. Pri
 
 ## 5a. Flatten the output
 
-Optional: The output csv will have a `regulatory_features` column which maybe "flattened" into a more usable format by updating the filenames in the `src/flatten.py` file. Run `python -m src.flatten` to flatten the `regulatory_features` column for each csv file in the `data/output` directory.
+Optional: The output csv will have a `regulatory_features` column which may be "flattened" into a more usable format by updating the filenames in the `src/flatten.py` file.
+
+First, open `src/flatten.py` and update the filenames lsited. Then, run the file:
+
+```bash
+python -m src.flatten
+```
+
+Each file should now be "flattened" and saved in the `data/output` directory.
+
+# Future Improvements
+
+- [ ] Flattening output should happen automatically and shouldn't require an additional step.
