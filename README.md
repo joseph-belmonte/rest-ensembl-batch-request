@@ -27,7 +27,7 @@ python -m venv venv
 Still at the root of the repository, install the required packages:
 
 ```bash
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 ## 3. Update input files
