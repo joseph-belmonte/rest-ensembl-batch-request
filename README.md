@@ -56,4 +56,4 @@ Depending on the number of gene coordinates, the process may take some time. Pri
 
 # Future Improvements
 
-- [ ] Flattening output should happen automatically and shouldn't require an additional step.
+Feel free to suggest improvements or modifications via an issue. 
