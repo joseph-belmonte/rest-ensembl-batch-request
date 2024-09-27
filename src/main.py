@@ -1,19 +1,25 @@
-""" 
-This is the main file for the project. 
-"""
-
+import os
 from src.data_manager import DataManager
-
+from src.flatten import flatten_regulatory_data
+from src.config import BASE_DIR
 
 def main():
-    """
-    Entry point of the program.
+    # Initialize the data manager
+    data_manager = DataManager()
 
-    This function initializes a DataManager object and calls its `process_all_csv_files` method.
-    """
-    manager = DataManager()
-    manager.process_all_csv_files()
+    # Process all CSV files in the input directory
+    print("Starting CSV processing...")
+    data_manager.process_all_csv_files()
 
+    # After processing, flatten the output data
+    output_dir = os.path.join(BASE_DIR, "..", "data", "output")
+    for filename in os.listdir(output_dir):
+        if filename.startswith("output_") and filename.endswith(".csv"):
+            print(f"Flattening regulatory data for {filename}...")
+            flat_output_filename = f"flat_{filename}"
+            flatten_regulatory_data(filename, flat_output_filename)
+    
+    print("Processing complete.")
 
 if __name__ == "__main__":
     main()
