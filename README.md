@@ -52,20 +52,8 @@ This will retrieve regulatory features for the gene coordinates that are listed 
 
 ## 5. Wait for the requests to complete
 
-Depending on the number of gene coordinates, the process may take some time. Print statements are used to indicate which chromosome and which file are currently being read. The output will be saved in the `data/output` directory as a csv file.
-
-## 5a. Flatten the output
-
-Optional: The output csv will have a `regulatory_features` column which may be "flattened" into a more usable format by updating the filenames in the `src/flatten.py` file.
-
-First, open `src/flatten.py` and update the filenames lsited. Then, run the file:
-
-```bash
-python -m src.flatten
-```
-
-Each file should now be "flattened" and saved in the `data/output` directory.
+Depending on the number of gene coordinates, the process may take some time. Print statements are used to indicate which chromosome and which file are currently being read. The output will be saved in the `data/output` directory as a csv file. Because the API returns nested JSON objects, after all files in the `data/input` directory have been processed, and features have been fetched, the output files will be "flattened". The flattened files will be saved in the `data/output` directory with the prefix `flat_`.
 
 # Future Improvements
 
-- [ ] Flattening output should happen automatically and shouldn't require an additional step.
+Feel free to suggest improvements or modifications via an issue. 

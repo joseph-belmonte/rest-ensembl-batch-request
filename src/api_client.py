@@ -30,39 +30,51 @@ class APIClient:
             print(f"Loading cached regulatory features for region {region}")
             return cached_data[region]
 
+        # Fetch from API if not cached
         print(f"Fetching regulatory features for region {region}")
         url = f"{SERVER}/overlap/region/human/{region}?feature=regulatory"
         response = self.make_request(url, region)
+        print('api reponse:', response)
         if response:
             cached_data[region] = response
             self.cache_data(cached_data, cache_file)
+        if not response:
+            print('response is None')
         return response
 
     def make_request(self, url, identifier):
         """Makes a request to a URL and handles errors by logging them"""
         try:
+            print(f"Making request to {url}")
             response = requests.get(
                 url, headers={"Content-Type": "application/json"}, timeout=10
             )
             response.raise_for_status()
+            print(f"Received response for {identifier}: {response.status_code}")
             return response.json()
         except requests.exceptions.RequestException as e:
+            print(f"Failed request for {identifier}: {e}")
             self.log_error(identifier, str(e))
             return None
 
     def cache_data(self, data, file_path):
         """Cache the data in a JSON file."""
-        with open(file_path, "w", encoding="utf-8") as file:
+        if os.path.exists(file_path):
+            # Load the existing cache data to avoid overwriting
+            existing_data = self.load_cached_data(file_path)
+            existing_data.update(data)
+            data = existing_data
+        with open(file_path, "w") as file:
             json.dump(data, file)
 
     def load_cached_data(self, file_path):
         """Load data from a cached JSON file."""
         if os.path.exists(file_path):
-            with open(file_path, "r", encoding="utf-8") as file:
+            with open(file_path, "r") as file:
                 return json.load(file)
         return {}  # Return an empty dictionary if no cache exists yet
 
     def log_error(self, identifier, error_message):
         """Log errors to a file for later review."""
-        with open(self.error_log, "a", encoding="utf-8") as file:
+        with open(self.error_log, "a") as file:
             file.write(f"Error for {identifier}: {error_message}\n")
